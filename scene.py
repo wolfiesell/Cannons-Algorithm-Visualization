@@ -115,7 +115,7 @@ class TextBox(Scene):
         fade_out_labels = FadeOut(VGroup(label_a, label_b))
         
         # Play the fade out animation
-        #self.play(fade_out_labels)
+        self.play(fade_out_labels)
         
         self.wait()
 
