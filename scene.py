@@ -1,5 +1,15 @@
 from manim import *
 
+def create_blank_textbox(text_color):
+    result = VGroup()  # create a VGroup
+    box = Rectangle(  # create a box
+        height=1, width=1, fill_color=BLUE, 
+        fill_opacity=0.5, stroke_color=BLUE
+    )
+    
+    result.add(box)  # add both objects to the VGroup
+    return result
+
 def create_textbox(number, position, text_color):
     result = VGroup()  # create a VGroup
     box = Rectangle(  # create a box
@@ -22,6 +32,16 @@ def create_matrix(position, text_color):
     box_list = []
     for i in range(9):
         box_list.append(create_textbox(i, position, text_color))
+    matrix.add(*box_list)  # add the elements of box_list to the matrix
+    matrix.arrange_in_grid(rows=3, cols=3, buff=0)
+    
+    return matrix
+
+def create_blank_matrix(text_color):
+    matrix = VGroup()
+    box_list = []
+    for i in range(9):
+        box_list.append(create_blank_textbox(text_color))
     matrix.add(*box_list)  # add the elements of box_list to the matrix
     matrix.arrange_in_grid(rows=3, cols=3, buff=0)
     
@@ -92,7 +112,9 @@ class TextBox(Scene):
         matrix1 = create_matrix("top_left", WHITE)
         
         # Create second matrix
-        matrix2 = create_matrix("bottom_right", BLACK)
+        matrix2 = create_matrix("bottom_right", GREEN)
+        matrix3 = create_blank_matrix(BLACK)
+
         
         # Ensure matrix2 is in front of matrix1 by setting z_index
         
@@ -104,7 +126,7 @@ class TextBox(Scene):
         # Create labels for the matrices
         label_a = Text("Matrix A", font_size=24).next_to(matrix1, UP)
         label_b = Text("Matrix B", font_size=24).next_to(matrix2, UP)
-        
+        label_c = Text("Matrix B", font_size=24)
         # Add the group of matrices and labels to the scene
         self.add(matrices, label_a, label_b)
         
@@ -112,12 +134,23 @@ class TextBox(Scene):
         self.wait(3)
         
         # Create the fade out animation for the labels
-        fade_out_labels = FadeOut(VGroup(label_a, label_b))
+     #   fade_out_labels = FadeOut(VGroup(label_a, label_b))
         
         # Play the fade out animation
-        self.play(fade_out_labels)
+      #  self.play(fade_out_labels)
         
         self.wait()
+
+        self.add(matrix3)
+
+        self.wait()
+
+        for box in matrix1:
+            
+            self.play(box.animate.set_fill(BLACK).set_stroke(BLACK), run_time=2)
+        for box in matrix2:
+            
+                self.play(box.animate.set_fill(BLACK).set_stroke(BLACK), run_time=2)
 
 
         
@@ -130,6 +163,8 @@ class TextBox(Scene):
             matrices.animate.arrange(RIGHT, buff=-3),
             run_time=2
         )
+
+
         
         self.wait()
         
