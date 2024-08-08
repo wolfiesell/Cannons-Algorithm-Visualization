@@ -49,8 +49,8 @@ def createCustomDoubledTextbox(number1, number2, text_color_right, text_color_le
     )
     number_text_left = Text(str(number1), font_size=24, color=text_color_left)
     number_text_right = Text(str(number2), font_size=24, color=text_color_right)
-    number_text_right.align_to(box, UL).shift(DOWN * 0.1 + RIGHT * 0.1)
-    number_text_left.align_to(box, DR).shift(UP * 0.1 + LEFT * 0.1)
+    number_text_left.align_to(box, UL).shift(DOWN * 0.1 + RIGHT * 0.1)
+    number_text_right.align_to(box, DR).shift(UP * 0.1 + LEFT * 0.1)
 
     result.add(box, number_text_left, number_text_right)
     return result
@@ -205,8 +205,8 @@ def createCustomDoubledMatrix6(textColor1, textColor2, buffer):
 class Cannon(Scene):
     def construct(self):
         
-        matrixA = createMatrix(YELLOW)
-        matrixB = createMatrix(WHITE)
+        matrixA = createMatrix(WHITE)
+        matrixB = createMatrix(YELLOW)
         matrixC = createBlankMatrix()
 
         matrices = VGroup(matrixA, matrixC, matrixB).arrange(RIGHT, buff = 1)
@@ -400,11 +400,3 @@ class Cannon(Scene):
         self.wait(1)  # Pause for a second
         self.play(*fade_out_animations2)
         self.wait()
-
-
-
-
-
-
-
-
