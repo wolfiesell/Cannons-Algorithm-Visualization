@@ -25,10 +25,7 @@ def createTextbox(number, text_color):
         height=1, width=1, fill_color=BLUE, 
         fill_opacity=0.5, stroke_color=BLUE
     )
-    
     number_text = Text(str(number), font_size=24, color=text_color)
-    
-    
     result.add(box, number_text)
     return result
 
@@ -199,6 +196,26 @@ def createCustomDoubledMatrix6(textColor1, textColor2, buffer):
     matrix.arrange_in_grid(rows=3, cols=3, buff=buffer)
     return matrix
 
+def createCustomDoubledMatrix7(textColor1, textColor2, buffer):
+    matrix = VGroup()
+
+    box_list = []
+    
+    box_list.append(createCustomDoubledTextbox(2, 6, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(0, 1, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(1, 5, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(3, 0, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(4, 4, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(5, 8, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(7, 3, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(8, 7, textColor1, textColor2))
+    box_list.append(createCustomDoubledTextbox(6, 2, textColor1, textColor2))
+    matrix.add(*box_list)
+    matrix.arrange_in_grid(rows=3, cols=3, buff=buffer)
+    return matrix
+
+
+
 
 
 
@@ -342,12 +359,26 @@ class Cannon(Scene):
                 number1 = int(box[1].text)
                 number2 = int(box[2].text)
                 product = number1 * number2
-                product_text = Text(str(product), font_size=24, color=RED)
+                
+                # Create the multiplication sign text
+                multiplication_sign = Text('x', font_size=24, color=BLACK)
+                multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)              
+                # Create the product tex
+                product_text = Text(str(product), font_size=24, color=BLACK)
                 product_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
-                box.add(product_text)
+                
+                # Add texts to the box
+                box.add(multiplication_sign, product_text)
+                
+                # Create fade-in and fade-out animations
+                fade_in_animations.append(FadeIn(multiplication_sign))
                 fade_in_animations.append(FadeIn(product_text))
+                fade_out_animations.append(FadeOut(multiplication_sign))
                 fade_out_animations.append(FadeOut(product_text))
+            
             return fade_in_animations, fade_out_animations
+
+
 
         fade_in_animations, fade_out_animations = addProductToBoxesWithFade(stepZero6)
         self.play(*fade_in_animations)
@@ -390,13 +421,155 @@ class Cannon(Scene):
         ]
         self.play(*nextAnimation2)
         self.wait()
+        stepZero6.set_opacity(0)
+
         nextStep = createCustomDoubledMatrix6(YELLOW, WHITE, 0.25)
-        self.remove(stepZero6)
         self.add(nextStep)
+
+        def addProductToBoxesWithFade2(matrix):
+            fade_in_animations = []
+            fade_out_animations = []
+            
+            # Hardcoded values to add to the product for each box
+            add_values = [0, 4, 16, 12, 35, 6, 48, 6, 35]  # Example: squares of 0 through 8
+
+            for i, box in enumerate(matrix):
+                if i >= len(add_values):
+                    raise IndexError("Not enough hardcoded values for the number of boxes in matrix.")
+
+                number1 = int(box[1].text)
+                number2 = int(box[2].text)
+                product = number1 * number2
+                
+                # Add the corresponding value from add_values to the product
+                product += add_values[i]
+                
+                # Create the multiplication sign text
+                multiplication_sign = Text('x', font_size=24, color=BLACK)
+                multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)
+                
+                # Create the product text
+                product_text = Text(str(product), font_size=24, color=BLACK)
+                product_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                
+                # Add texts to the box
+                box.add(multiplication_sign, product_text)
+                
+                # Create fade-in and fade-out animations
+                fade_in_animations.append(FadeIn(multiplication_sign))
+                fade_in_animations.append(FadeIn(product_text))
+                fade_out_animations.append(FadeOut(multiplication_sign))
+                fade_out_animations.append(FadeOut(product_text))
+            
+            return fade_in_animations, fade_out_animations
+
+
+
+        fade_in_animations, fade_out_animations = addProductToBoxesWithFade2(nextStep)
+        self.play(*fade_in_animations)
+        self.wait(1)  # Pause for a second
+        self.play(*fade_out_animations)
+        self.wait(3)
+        
+        
+        
+        
+        self.wait(3)
+
+        arcPath6 = ArcBetweenPoints(nextStep[0][1].get_center(), nextStep[2][1].get_center(), angle=PI/2)
+        arcPath7 = ArcBetweenPoints(nextStep[3][1].get_center(), nextStep[5][1].get_center(), angle=PI/2)
+        arcPath8 = ArcBetweenPoints(nextStep[6][1].get_center(), nextStep[8][1].get_center(), angle=PI/2)
+
+        nextAnimation = [
+            MoveAlongPath(nextStep[0][1], arcPath6),
+            nextStep[1][1].animate.move_to(nextStep[0][1]),
+            nextStep[2][1].animate.move_to(nextStep[1][1]),
+            MoveAlongPath(nextStep[3][1], arcPath7),
+            nextStep[4][1].animate.move_to(nextStep[3][1]),
+            nextStep[5][1].animate.move_to(nextStep[4][1]),
+            MoveAlongPath(nextStep[6][1], arcPath8),
+            nextStep[7][1].animate.move_to(nextStep[6][1]),
+            nextStep[8][1].animate.move_to(nextStep[7][1]),
+        ]
+        self.play(*nextAnimation)
+
+        arcPath6 = ArcBetweenPoints(nextStep[0][2].get_center(), nextStep[6][2].get_center(), angle=PI/2)
+        arcPath7 = ArcBetweenPoints(nextStep[1][2].get_center(), nextStep[7][2].get_center(), angle=PI/2)
+        arcPath8 = ArcBetweenPoints(nextStep[2][2].get_center(), nextStep[8][2].get_center(), angle=PI/2)
+
+        nextAnimation2 = [
+            MoveAlongPath(nextStep[0][2], arcPath6), #
+            nextStep[3][2].animate.move_to(nextStep[0][2]),
+            nextStep[6][2].animate.move_to(nextStep[3][2]),
+            MoveAlongPath(nextStep[1][2], arcPath7), #
+            nextStep[4][2].animate.move_to(nextStep[1][2]),
+            nextStep[7][2].animate.move_to(nextStep[4][2]),
+            MoveAlongPath(nextStep[2][2], arcPath8), #
+            nextStep[5][2].animate.move_to(nextStep[2][2]),
+            nextStep[8][2].animate.move_to(nextStep[5][2]),
+        ]
+        self.play(*nextAnimation2)
+        nextStep.set_opacity(0)
+        nextStep2 = createCustomDoubledMatrix7(YELLOW, WHITE, 0.25)
+        self.add(nextStep2)
         self.wait()
 
-        fade_in_animations1, fade_out_animations2 = addProductToBoxesWithFade(nextStep)
-        self.play(*fade_in_animations1)
+        def addProductToBoxesWithFade3(matrix):
+            fade_in_animations = []
+            fade_out_animations = []
+            endProducts = []
+            
+            # Hardcoded values to add to the product for each box
+            add_values = [3, 18, 16, 42, 38, 26, 48, 34, 99]  # Example: squares of 0 through 8
+
+            for i, box in enumerate(matrix):
+                if i >= len(add_values):
+                    raise IndexError("Not enough hardcoded values for the number of boxes in matrix.")
+
+                number1 = int(box[1].text)
+                number2 = int(box[2].text)
+                product = number1 * number2
+                
+                # Add the corresponding value from add_values to the product
+                product += add_values[i]
+                endProducts += product
+                
+                # Create the multiplication sign text
+                multiplication_sign = Text('x', font_size=24, color=BLACK)
+                multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)
+                
+                # Create the product text
+                product_text = Text(str(product), font_size=24, color=BLACK)
+                product_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                
+                # Add texts to the box
+                box.add(multiplication_sign, product_text)
+                
+                # Create fade-in and fade-out animations
+                fade_in_animations.append(FadeIn(multiplication_sign))
+                fade_in_animations.append(FadeIn(product_text))
+                fade_out_animations.append(FadeOut(multiplication_sign))
+                fade_out_animations.append(FadeOut(product_text))
+            
+            return fade_in_animations, fade_out_animations, endProducts
+        
+
+        
+        fade_in_animations, fade_out_animations = addProductToBoxesWithFade3(nextStep2)
+
+
+        self.play(*fade_in_animations)
         self.wait(1)  # Pause for a second
-        self.play(*fade_out_animations2)
-        self.wait()
+        self.play(*fade_out_animations)
+        self.wait(3)
+
+
+
+        
+
+
+
+        
+
+        
+        
