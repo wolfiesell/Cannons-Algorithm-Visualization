@@ -532,7 +532,7 @@ class Cannon(Scene):
                 
                 # Add the corresponding value from add_values to the product
                 product += add_values[i]
-                endProducts += product
+                
                 
                 # Create the multiplication sign text
                 multiplication_sign = Text('x', font_size=24, color=BLACK)
@@ -551,8 +551,7 @@ class Cannon(Scene):
                 fade_out_animations.append(FadeOut(multiplication_sign))
                 fade_out_animations.append(FadeOut(product_text))
             
-            return fade_in_animations, fade_out_animations, endProducts
-        
+            return fade_in_animations, fade_out_animations        
 
         
         fade_in_animations, fade_out_animations = addProductToBoxesWithFade3(nextStep2)
