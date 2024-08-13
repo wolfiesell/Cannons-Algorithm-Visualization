@@ -38,6 +38,25 @@ def createMatrix(textColor):
     matrix.arrange_in_grid(rows=3, cols=3, buff=0.25)
     return matrix
 
+def createFinalMatrix(textColor):
+    matrix = VGroup()
+    box_list = []
+    
+    box_list.append(createTextbox(15, textColor))
+    box_list.append(createTextbox(18, textColor))
+    box_list.append(createTextbox(21, textColor))
+    box_list.append(createTextbox(42, textColor))
+    box_list.append(createTextbox(54, textColor))
+    box_list.append(createTextbox(66, textColor))
+    box_list.append(createTextbox(69, textColor))
+    box_list.append(createTextbox(90, textColor))
+    box_list.append(createTextbox(111, textColor))
+
+    matrix.add(*box_list)
+    matrix.arrange_in_grid(rows=3, cols=3, buff=0.25)
+    return matrix
+
+
 def createCustomDoubledTextbox(number1, number2, text_color_right, text_color_left):
     result = VGroup()
     box = Rectangle(
@@ -226,10 +245,36 @@ class Cannon(Scene):
         matrixB = createMatrix(YELLOW)
         matrixC = createBlankMatrix()
 
-        matrices = VGroup(matrixA, matrixC, matrixB).arrange(RIGHT, buff = 1)
-        matrices.move_to(ORIGIN)
-        self.add(matrices)
-        self.wait()
+        # Create multiplication and equal signs
+        times_sign = MathTex("\\times")
+        equals_sign = MathTex("=")
+
+        # Group the matrices and the signs
+        matrices_with_signs = VGroup(
+            matrixA, times_sign, matrixB, equals_sign, matrixC
+        ).arrange(RIGHT, buff=0.5)
+
+        # Center the entire group on the screen
+        matrices_with_signs.move_to(ORIGIN)
+
+        # Add the group to the scene
+        self.add(matrices_with_signs)
+        self.wait(3)
+
+        # Fade out matrixC, times_sign, and equals_sign
+        self.play(
+            
+            FadeOut(times_sign),
+            FadeOut(equals_sign)
+        )
+
+        
+
+        self.wait(3)
+
+
+
+
         
 
         animations = []
@@ -249,16 +294,33 @@ class Cannon(Scene):
         
         self.play(*animations)
         
-        
-        realMatrixC = createCustomDoubledMatrix(YELLOW, WHITE, 0.25)
-        self.remove(matrixC)
-        self.add(realMatrixC)
+        self.wait(2)
+        '''
+        self.play(
+            FadeOut(matrixA, matrixB)
+
+        )
+
+        self.wait(2)
+        '''
         
 
-        animations2 = []
-        animations2.append(FadeOut(matrixA))
-        animations2.append(FadeOut(matrixB))
-        self.play(animations2)
+        realMatrixC = createCustomDoubledMatrix(YELLOW, WHITE, 0.25)
+        self.play(
+            FadeOut(matrixA, matrixB, matrixC),
+            FadeIn(realMatrixC.shift(RIGHT * 4.79))
+        )
+
+        
+        self.wait()
+
+        self.play(
+            realMatrixC.animate.move_to(ORIGIN)
+        )
+        self.wait()
+        
+        
+
         
 
         # Define arc path for the first movement sequence in top_left_animations
@@ -274,9 +336,15 @@ class Cannon(Scene):
         self.play(*top_left_animations,
                   run_time=1)
         
-        self.remove(realMatrixC)
         stepZero1 = createCustomDoubledMatrix0(YELLOW, WHITE, 0.25)
-        self.add(stepZero1)
+        self.play(
+            FadeOut(realMatrixC),
+            FadeIn(stepZero1),
+            run_time = 0.00000000000000001
+        )
+        
+        
+        
 
         # Define arc path for the first movement sequence in top_left_animations2
         arcPath1 = ArcBetweenPoints(stepZero1[6][1].get_center(), stepZero1[8][1].get_center(), angle=PI/2)
@@ -290,8 +358,11 @@ class Cannon(Scene):
         self.play(*top_left_animations2)
         
         stepZero2 = createCustomDoubledMatrix1(YELLOW, WHITE, 0.25)
-        self.remove(stepZero1)
-        self.add(stepZero2)
+        self.play(
+            FadeOut(stepZero1),
+            FadeIn(stepZero2),
+            run_time = 0.00000000000000001
+        )
         
 
         # Define arc path for the first movement sequence in top_left_animations3
@@ -305,9 +376,13 @@ class Cannon(Scene):
 
         self.play(*top_left_animations3)
         
-        self.remove(stepZero2)
+        
         stepZero3 = createCustomDoubledMatrix2(YELLOW, WHITE, 0.25)
-        self.add(stepZero3)
+        self.play(
+            FadeOut(stepZero2),
+            FadeIn(stepZero3),
+            run_time = 0.00000000000000001
+        )
 
         # Define arc path for the first movement sequence in realTopLeftAnimations
         arcPath3 = ArcBetweenPoints(stepZero3[1][2].get_center(), stepZero2[7][2].get_center(), angle=PI/2)
@@ -319,9 +394,13 @@ class Cannon(Scene):
         ]
         
         self.play(*realTopLeftAnimations)
-        self.remove(stepZero3)
+        
         stepZero4 = createCustomDoubledMatrix3(YELLOW, WHITE, 0.25)
-        self.add(stepZero4)
+        self.play(
+            FadeOut(stepZero3),
+            FadeIn(stepZero4),
+            run_time = 0.00000000000000001
+        )
 
         # Define arc path for the first movement sequence in realTopLeftAnimations2
         arcPath4 = ArcBetweenPoints(stepZero4[2][2].get_center(), stepZero4[8][2].get_center(), angle=PI/2)
@@ -334,9 +413,12 @@ class Cannon(Scene):
         
         self.play(*realTopLeftAnimations2)
         
-        self.remove(stepZero4)
         stepZero5 = createCustomDoubledMatrix4(YELLOW, WHITE, 0.25)
-        self.add(stepZero5)
+        self.play(
+            FadeOut(stepZero4),
+            FadeIn(stepZero5),
+            run_time = 0.00000000000000001
+        )
 
         # Define arc path for the first movement sequence in realTopLeftAnimations3
         arcPath5 = ArcBetweenPoints(stepZero5[2][2].get_center(), stepZero5[8][2].get_center(), angle=PI/2)
@@ -348,9 +430,13 @@ class Cannon(Scene):
         ]
         
         self.play(*realTopLeftAnimations3)
-        self.remove(stepZero5)
+        
         stepZero6 = createCustomDoubledMatrix5(YELLOW, WHITE, .25)
-        self.add(stepZero6)
+        self.play(
+            FadeOut(stepZero5),
+            FadeIn(stepZero6),
+            run_time = 0.00000000000000001
+        )
     
         def addProductToBoxesWithFade(matrix):
             fade_in_animations = []
@@ -361,7 +447,9 @@ class Cannon(Scene):
                 product = number1 * number2
                 
                 # Create the multiplication sign text
-                multiplication_sign = Text('x', font_size=24, color=BLACK)
+                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
+
+
                 multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)              
                 # Create the product tex
                 product_text = Text(str(product), font_size=24, color=BLACK)
@@ -445,7 +533,7 @@ class Cannon(Scene):
                 product += add_values[i]
                 
                 # Create the multiplication sign text
-                multiplication_sign = Text('x', font_size=24, color=BLACK)
+                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
                 multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)
                 
                 # Create the product text
@@ -535,7 +623,7 @@ class Cannon(Scene):
                 
                 
                 # Create the multiplication sign text
-                multiplication_sign = Text('x', font_size=24, color=BLACK)
+                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
                 multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)
                 
                 # Create the product text
@@ -559,8 +647,16 @@ class Cannon(Scene):
 
         self.play(*fade_in_animations)
         self.wait(1)  # Pause for a second
-        self.play(*fade_out_animations)
-        self.wait(3)
+    #   self.play(*fade_out_animations)
+        '''
+        nextStep2.set_opacity(0)
+        final = createFinalMatrix(BLACK)
+        self.add(final)
+        self.wait()
+        '''
+        #make
+
+
 
 
 
