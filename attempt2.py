@@ -291,7 +291,7 @@ class Cannon(Scene):
 
         # Add the group to the scene
         self.add(matrices_with_signs)
-        self.wait()
+        self.wait(4)
         
 
         # Fade out matrixC, times_sign, and equals_sign
@@ -700,7 +700,7 @@ class Cannon(Scene):
         for i in range(9):
             lastanimation.append(newnew[i][1].animate.move_to(newnew[i]))
         self.play(lastanimation)
-        self.wait()
+        
         self.play(
             newnew.animate.move_to(matrixC)
         )
