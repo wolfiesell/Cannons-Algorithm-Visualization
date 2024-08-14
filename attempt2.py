@@ -29,6 +29,18 @@ def createTextbox(number, text_color):
     result.add(box, number_text)
     return result
 
+def createTextbox333(number, text_color):
+    result = VGroup()  # create a VGroup
+    box = Rectangle(  # create a box
+        height=1, width=1, fill_color=BLUE, 
+        fill_opacity=0.5, stroke_color=BLUE
+    )
+    number_text = Text(str(number), font_size=24, color=text_color)
+    result.add(box, number_text)
+    #product_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+    number_text.align_to(box, DL).shift(UP * 0.1 + RIGHT * 0.1)
+    return result
+
 def createMatrix(textColor):
     matrix = VGroup()
     box_list = []
@@ -233,6 +245,24 @@ def createCustomDoubledMatrix7(textColor1, textColor2, buffer):
     matrix.arrange_in_grid(rows=3, cols=3, buff=buffer)
     return matrix
 
+def createCustomeMatrixFINAL0(textColor):
+    
+    matrix = VGroup()
+    box_list = []
+    
+    box_list.append(createTextbox333(15, textColor))
+    box_list.append(createTextbox333(18, textColor))
+    box_list.append(createTextbox333(21, textColor))
+    box_list.append(createTextbox333(42, textColor))
+    box_list.append(createTextbox333(54, textColor))
+    box_list.append(createTextbox333(66, textColor))
+    box_list.append(createTextbox333(69, textColor))
+    box_list.append(createTextbox333(90, textColor))
+    box_list.append(createTextbox333(111, textColor))
+
+    matrix.add(*box_list)
+    matrix.arrange_in_grid(rows=3, cols=3, buff=0.25)
+    return matrix
 
 
 
@@ -254,12 +284,15 @@ class Cannon(Scene):
             matrixA, times_sign, matrixB, equals_sign, matrixC
         ).arrange(RIGHT, buff=0.5)
 
+        
+
         # Center the entire group on the screen
         matrices_with_signs.move_to(ORIGIN)
 
         # Add the group to the scene
         self.add(matrices_with_signs)
-        self.wait(3)
+        self.wait()
+        
 
         # Fade out matrixC, times_sign, and equals_sign
         self.play(
@@ -270,7 +303,7 @@ class Cannon(Scene):
 
         
 
-        self.wait(3)
+        self.wait()
 
 
 
@@ -294,7 +327,6 @@ class Cannon(Scene):
         
         self.play(*animations)
         
-        self.wait(2)
         '''
         self.play(
             FadeOut(matrixA, matrixB)
@@ -472,7 +504,7 @@ class Cannon(Scene):
         self.play(*fade_in_animations)
         self.wait(1)  # Pause for a second
         self.play(*fade_out_animations)
-        self.wait(3)
+        self.wait()
 
         arcPath6 = ArcBetweenPoints(stepZero6[0][1].get_center(), stepZero6[2][1].get_center(), angle=PI/2)
         arcPath7 = ArcBetweenPoints(stepZero6[3][1].get_center(), stepZero6[5][1].get_center(), angle=PI/2)
@@ -555,14 +587,13 @@ class Cannon(Scene):
 
         fade_in_animations, fade_out_animations = addProductToBoxesWithFade2(nextStep)
         self.play(*fade_in_animations)
-        self.wait(1)  # Pause for a second
+        self.wait()  # Pause for a second
         self.play(*fade_out_animations)
-        self.wait(3)
+        self.wait()
         
         
         
         
-        self.wait(3)
 
         arcPath6 = ArcBetweenPoints(nextStep[0][1].get_center(), nextStep[2][1].get_center(), angle=PI/2)
         arcPath7 = ArcBetweenPoints(nextStep[3][1].get_center(), nextStep[5][1].get_center(), angle=PI/2)
@@ -637,7 +668,8 @@ class Cannon(Scene):
                 fade_in_animations.append(FadeIn(multiplication_sign))
                 fade_in_animations.append(FadeIn(product_text))
                 fade_out_animations.append(FadeOut(multiplication_sign))
-                fade_out_animations.append(FadeOut(product_text))
+                #fade_out_animations.append(FadeOut(product_text))
+                #fade_out_animations.append(product_text.animate.move_to(UP * 0.33333 + RIGHT * 0.3333))
             
             return fade_in_animations, fade_out_animations        
 
@@ -646,25 +678,49 @@ class Cannon(Scene):
 
 
         self.play(*fade_in_animations)
-        self.wait(1)  # Pause for a second
-    #   self.play(*fade_out_animations)
-        '''
+        self.wait()  # Pause for a second
+        #make the numbers in the bottom right (from addProductToBoxesWithFade3) move to the center while the numbers in the top left and bottom right fade out
+        fadeoutLast = []
+
+        for i in range(9):
+            fadeoutLast.append(FadeOut(nextStep2[i][1]))
+            fadeoutLast.append(FadeOut(nextStep2[i][2]))
+            
+        
+        self.play(fadeoutLast, fade_out_animations)
+        
+        newnew = createCustomeMatrixFINAL0(BLACK)
         nextStep2.set_opacity(0)
-        final = createFinalMatrix(BLACK)
-        self.add(final)
+        self.add(newnew)
+        lastanimation = []
+        
+        
+        
+        
+        for i in range(9):
+            lastanimation.append(newnew[i][1].animate.move_to(newnew[i]))
+        self.play(lastanimation)
         self.wait()
-        '''
-        #make
-
-
-
-
-
+        self.play(
+            newnew.animate.move_to(matrixC)
+        )
         
+        matrixA1 = createMatrix(WHITE)
+        matrixB1 = createMatrix(YELLOW)
+        matrixC1 = createMatrix(PINK) # dud for centering
+
+        matrixC1.set_opacity(0)
+        # Create multiplication and equal signs
+        times_sign1 = MathTex("\\times")
+        equals_sign1 = MathTex("=")
+
+        # Group the matrices and the signs
+        matrices_with_signs1 = VGroup(
+            matrixA1, times_sign1, matrixB1, equals_sign1, matrixC1
+        ).arrange(RIGHT, buff=0.5)
+        matrices_with_signs1.move_to(ORIGIN)
+        self.play(FadeIn(matrices_with_signs1))
+        self.wait(5)
 
 
-
-        
-
-        
         
