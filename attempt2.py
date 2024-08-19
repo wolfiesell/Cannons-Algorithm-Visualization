@@ -78,7 +78,7 @@ def createCustomDoubledTextbox(number1, number2, text_color_right, text_color_le
     number_text_left = Text(str(number1), font_size=24, color=text_color_left)
     number_text_right = Text(str(number2), font_size=24, color=text_color_right)
     number_text_left.align_to(box, UL).shift(DOWN * 0.1 + RIGHT * 0.1)
-    number_text_right.align_to(box, DR).shift(UP * 0.1 + LEFT * 0.1)
+    number_text_right.align_to(box, UR).shift(DOWN * 0.1 + LEFT * 0.1)
 
     result.add(box, number_text_left, number_text_right)
     return result
@@ -314,13 +314,13 @@ class Cannon(Scene):
         for i in range(9):
             number_text = matrixA[i][1]
             box_center = matrixC[i].get_center()
-            offset = np.array([-0.3, 0.3, 0])  # pos in box
+            offset = np.array([-0.32, 0.28, 0])  # pos in box
             target_position = box_center + offset
             animations.append(number_text.animate.move_to(target_position))
             
             number_text = matrixB[i][1]
             box_center = matrixC[i].get_center()
-            offset = np.array([0.3, -0.3, 0])  # pos in box
+            offset = np.array([0.32, 0.28, 0])  # pos in box
             target_position = box_center + offset
             animations.append(number_text.animate.move_to(target_position))
 
@@ -479,13 +479,13 @@ class Cannon(Scene):
                 product = number1 * number2
                 
                 # Create the multiplication sign text
-                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
+                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=30, color=BLACK)
 
 
-                multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)              
+                multiplication_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)              
                 # Create the product tex
                 product_text = Text(str(product), font_size=24, color=BLACK)
-                product_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                product_text.align_to(box[0], DR).shift(UP * 0.1 + LEFT * 0.1)
                 
                 # Add texts to the box
                 box.add(multiplication_sign, product_text)
@@ -566,11 +566,11 @@ class Cannon(Scene):
                 
                 # Create the multiplication sign text
                 multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
-                multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)
+                multiplication_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)
                 
                 # Create the product text
                 product_text = Text(str(product), font_size=24, color=BLACK)
-                product_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                product_text.align_to(box[0], DR).shift(UP * 0.1 + LEFT * 0.1)
                 
                 # Add texts to the box
                 box.add(multiplication_sign, product_text)
@@ -655,11 +655,11 @@ class Cannon(Scene):
                 
                 # Create the multiplication sign text
                 multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
-                multiplication_sign.move_to(box[1].get_center()).shift(DOWN * 0.3033 + RIGHT * 0.333333)
+                multiplication_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)
                 
                 # Create the product text
                 product_text = Text(str(product), font_size=24, color=BLACK)
-                product_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                product_text.align_to(box[0], DR).shift(UP * 0.1 + LEFT * 0.1)
                 
                 # Add texts to the box
                 box.add(multiplication_sign, product_text)
