@@ -344,7 +344,7 @@ class Cannon(Scene):
         )
 
         
-        self.wait()
+        
 
         self.play(
             realMatrixC.animate.move_to(ORIGIN)
@@ -472,11 +472,13 @@ class Cannon(Scene):
     
         def addProductToBoxesWithFade(matrix):
             fade_in_animations = []
+            movement_animations = []
             fade_out_animations = []
             for box in matrix:
                 number1 = int(box[1].text)
                 number2 = int(box[2].text)
                 product = number1 * number2
+                previousCalc = 0
                 
                 # Create the multiplication sign text
                 multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=30, color=BLACK)
@@ -487,22 +489,35 @@ class Cannon(Scene):
                 product_text = Text(str(product), font_size=24, color=BLACK)
                 product_text.align_to(box[0], DR).shift(UP * 0.1 + LEFT * 0.1)
                 
+                
+                previousCalc_text = Text(str(previousCalc), font_size=24, color=BLACK)
+                previousCalc_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                #for the first only
+                previousCalc_text.set_opacity(0)
                 # Add texts to the box
-                box.add(multiplication_sign, product_text)
+                box.add(multiplication_sign, product_text, previousCalc_text)
                 
                 # Create fade-in and fade-out animations
+               # self.play(stepZero6[8][4].animate.move_to())
+
                 fade_in_animations.append(FadeIn(multiplication_sign))
                 fade_in_animations.append(FadeIn(product_text))
+                fade_in_animations.append(FadeIn(previousCalc_text))
+                movement_animations.append(product_text.animate.move_to(previousCalc_text))
                 fade_out_animations.append(FadeOut(multiplication_sign))
                 fade_out_animations.append(FadeOut(product_text))
+                fade_out_animations.append(FadeOut(previousCalc_text))
+
             
-            return fade_in_animations, fade_out_animations
+            return fade_in_animations, fade_out_animations, movement_animations
 
 
 
-        fade_in_animations, fade_out_animations = addProductToBoxesWithFade(stepZero6)
+        fade_in_animations, fade_out_animations, movement_animations = addProductToBoxesWithFade(stepZero6)
         self.play(*fade_in_animations)
         self.wait(1)  # Pause for a second
+        self.play(*movement_animations)
+        
         self.play(*fade_out_animations)
         self.wait()
 
@@ -548,47 +563,68 @@ class Cannon(Scene):
 
         def addProductToBoxesWithFade2(matrix):
             fade_in_animations = []
+            movement_animations = []
             fade_out_animations = []
-            
-            # Hardcoded values to add to the product for each box
-            add_values = [0, 4, 16, 12, 35, 6, 48, 6, 35]  # Example: squares of 0 through 8
-
-            for i, box in enumerate(matrix):
-                if i >= len(add_values):
-                    raise IndexError("Not enough hardcoded values for the number of boxes in matrix.")
-
+            addition_animations = []
+            previousCalcs = [0,4,16,12,35,6,48,6,35]
+            i = 0
+            for box in matrix:
                 number1 = int(box[1].text)
                 number2 = int(box[2].text)
                 product = number1 * number2
-                
-                # Add the corresponding value from add_values to the product
-                product += add_values[i]
+                previousCalc = previousCalcs[i]
+                i = i + 1
+
                 
                 # Create the multiplication sign text
-                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
-                multiplication_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)
-                
-                # Create the product text
-                product_text = Text(str(product), font_size=24, color=BLACK)
+                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=30, color=BLACK)
+                multiplication_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333) 
+
+              #  addition_sign = MathTex(r'\boldsymbol{\plus}', font_size=30, color=BLACK)
+              #  addition_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)              
+                # Create the product tex
+                product_text = Text(str(product), font_size=24, color=ORANGE)
                 product_text.align_to(box[0], DR).shift(UP * 0.1 + LEFT * 0.1)
                 
+                previousCalc_text = Text(str(previousCalc), font_size=24, color=BLACK)
+                previousCalc_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                #for the first only
+                finalcalc = previousCalc+product
+                finalcalc_text = Text(str(finalcalc), font_size=24, color=BLACK)
+                finalcalc_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                
                 # Add texts to the box
-                box.add(multiplication_sign, product_text)
+                box.add(multiplication_sign, product_text, previousCalc_text)
                 
                 # Create fade-in and fade-out animations
+               # self.play(stepZero6[8][4].animate.move_to())
+
                 fade_in_animations.append(FadeIn(multiplication_sign))
                 fade_in_animations.append(FadeIn(product_text))
+                fade_in_animations.append(FadeIn(previousCalc_text))
+                movement_animations.append(product_text.animate.move_to(previousCalc_text))
                 fade_out_animations.append(FadeOut(multiplication_sign))
                 fade_out_animations.append(FadeOut(product_text))
+                #movement_animations.append(FadeOut(previousCalc_text))
+                addition_animations.append(Transform(previousCalc_text, finalcalc_text))
+                addition_animations.append(Transform(product_text, finalcalc_text))
+                fade_out_animations.append(FadeOut(finalcalc_text))
+                fade_out_animations.append(FadeOut(previousCalc_text))
+
             
-            return fade_in_animations, fade_out_animations
+            return fade_in_animations, fade_out_animations, movement_animations, addition_animations, finalcalc_text
 
 
 
-        fade_in_animations, fade_out_animations = addProductToBoxesWithFade2(nextStep)
+        fade_in_animations, fade_out_animations, movement_animations, addition_animations, finalcalc_text = addProductToBoxesWithFade2(nextStep)
         self.play(*fade_in_animations)
-        self.wait()  # Pause for a second
+        self.wait(1)  # Pause for a second
+        self.play(*movement_animations)
+
+        self.play(*addition_animations)
+        self.wait()
         self.play(*fade_out_animations)
+        
         self.wait()
         
         
@@ -635,50 +671,69 @@ class Cannon(Scene):
 
         def addProductToBoxesWithFade3(matrix):
             fade_in_animations = []
+            movement_animations = []
             fade_out_animations = []
-            endProducts = []
-            
-            # Hardcoded values to add to the product for each box
-            add_values = [3, 18, 16, 42, 38, 26, 48, 34, 99]  # Example: squares of 0 through 8
-
-            for i, box in enumerate(matrix):
-                if i >= len(add_values):
-                    raise IndexError("Not enough hardcoded values for the number of boxes in matrix.")
-
+            addition_animations = []
+            previousCalcs = [3,18,16,42,38,26,48,34,99]
+            i = 0
+            for box in matrix:
                 number1 = int(box[1].text)
                 number2 = int(box[2].text)
                 product = number1 * number2
-                
-                # Add the corresponding value from add_values to the product
-                product += add_values[i]
-                
+                previousCalc = previousCalcs[i]
+                i = i + 1
+
                 
                 # Create the multiplication sign text
-                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=35, color=BLACK)
-                multiplication_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)
-                
-                # Create the product text
+                multiplication_sign = MathTex(r'\boldsymbol{\times}', font_size=30, color=BLACK)
+                multiplication_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333) 
+
+              #  addition_sign = MathTex(r'\boldsymbol{\plus}', font_size=30, color=BLACK)
+              #  addition_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)              
+                # Create the product tex
                 product_text = Text(str(product), font_size=24, color=BLACK)
                 product_text.align_to(box[0], DR).shift(UP * 0.1 + LEFT * 0.1)
                 
+                previousCalc_text = Text(str(previousCalc), font_size=24, color=ORANGE)
+                previousCalc_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                #for the first only
+                finalcalc = previousCalc+product
+                finalcalc_text = Text(str(finalcalc), font_size=24, color=BLACK)
+                finalcalc_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
+                
                 # Add texts to the box
-                box.add(multiplication_sign, product_text)
+                box.add(multiplication_sign, product_text, previousCalc_text)
                 
                 # Create fade-in and fade-out animations
+               # self.play(stepZero6[8][4].animate.move_to())
+
                 fade_in_animations.append(FadeIn(multiplication_sign))
                 fade_in_animations.append(FadeIn(product_text))
+                fade_in_animations.append(FadeIn(previousCalc_text))
+                movement_animations.append(product_text.animate.move_to(previousCalc_text))
                 fade_out_animations.append(FadeOut(multiplication_sign))
-                #fade_out_animations.append(FadeOut(product_text))
-                #fade_out_animations.append(product_text.animate.move_to(UP * 0.33333 + RIGHT * 0.3333))
+                fade_out_animations.append(FadeOut(product_text))
+                #movement_animations.append(FadeOut(previousCalc_text))
+                addition_animations.append(Transform(previousCalc_text, finalcalc_text))
+                addition_animations.append(Transform(product_text, finalcalc_text))
+                fade_out_animations.append(FadeOut(finalcalc_text))
+                #fade_out_animations.append(FadeOut(previousCalc_text))
+                #addition_animations.append(finalcalc_text.animate.set_color(BLACK))
+
             
-            return fade_in_animations, fade_out_animations        
-
-        
-        fade_in_animations, fade_out_animations = addProductToBoxesWithFade3(nextStep2)
+            return fade_in_animations, fade_out_animations, movement_animations, addition_animations, finalcalc_text
 
 
+
+        fade_in_animations, fade_out_animations, movement_animations, addition_animations, finalcalc_text = addProductToBoxesWithFade3(nextStep2)
         self.play(*fade_in_animations)
-        self.wait()  # Pause for a second
+        self.wait(1)  # Pause for a second
+        self.play(*movement_animations)
+        self.play(*addition_animations)
+        
+        #self.play(*fade_out_animations)
+        
+        self.wait()
         #make the numbers in the bottom right (from addProductToBoxesWithFade3) move to the center while the numbers in the top left and bottom right fade out
         fadeoutLast = []
 
