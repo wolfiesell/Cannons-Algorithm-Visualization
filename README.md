@@ -4,7 +4,7 @@ Provides a purely visual, text-free demonstration of Cannon's algorithm for dist
 
 ## Deliverables
 View animation on [Youtube]([www.youtube.com](https://youtu.be/MRqcUdIfZno))
-Or check the local file [Cannon.mp4](media/videos/attempt2/1080p60/Cannon.mp4), which will update with any changes made to [attempt2.py](attempt2.py).
+or check the local file [Cannon.mp4](media/videos/attempt2/1080p60/Cannon.mp4), which will update with any changes made to [attempt2.py](attempt2.py).
 
 ## Acknowledgements 
 The Manim Community Developers. (2024). Manim – Mathematical Animation Framework (Version v0.18.1) https://www.manim.community/
