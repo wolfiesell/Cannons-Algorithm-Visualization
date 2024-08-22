@@ -1,6 +1,6 @@
 # Cannon's Algorithm for Matrix Multiplication Visualization
 
-Provides a visual, language agnositic demonstration of Cannon's algorithm for distributed memory matrix multiplication. Created under consultation for Professor Hongyang Sun's EECS 690/700: Algorithms for HPC @ KU. 
+Provides a purely visual, text-free demonstration of Cannon's algorithm for distributed memory matrix multiplication. Created under direct consultation for Professor Hongyang Sun's EECS 690/700: Algorithms for HPC @ KU. 
 
 ## Deliverables
 View animation on [Youtube]([www.youtube.com](https://youtu.be/MRqcUdIfZno))
