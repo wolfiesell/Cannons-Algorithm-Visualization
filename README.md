@@ -9,3 +9,7 @@ Or check the local file [Cannon.mp4](media/videos/attempt2/1080p60/Cannon.mp4), 
 ## Acknowledgements 
 The Manim Community Developers. (2024). Manim – Mathematical Animation Framework (Version v0.18.1) https://www.manim.community/
 To code with Manim, visit the installation manual: https://docs.manim.community/en/stable/installation.html
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE.md) for more information.
