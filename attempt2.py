@@ -503,7 +503,10 @@ class Cannon(Scene):
                 fade_in_animations.append(FadeIn(multiplication_sign))
                 fade_in_animations.append(FadeIn(product_text))
                 fade_in_animations.append(FadeIn(previousCalc_text))
-                movement_animations.append(product_text.animate.move_to(previousCalc_text))
+                if product < 9:
+                    movement_animations.append(product_text.animate.move_to(previousCalc_text))
+                else:
+                    movement_animations.append(product_text.animate.move_to(previousCalc_text).shift(RIGHT * 0.1))
                 fade_out_animations.append(FadeOut(multiplication_sign))
                 fade_out_animations.append(FadeOut(product_text))
                 fade_out_animations.append(FadeOut(previousCalc_text))
@@ -517,7 +520,7 @@ class Cannon(Scene):
         self.play(*fade_in_animations)
         self.wait(1)  # Pause for a second
         self.play(*movement_animations)
-        
+        self.wait()
         self.play(*fade_out_animations)
         self.wait()
 
