@@ -693,9 +693,9 @@ class Cannon(Scene):
 
               #  addition_sign = MathTex(r'\boldsymbol{\plus}', font_size=30, color=BLACK)
               #  addition_sign.move_to(box[1].get_center()).shift(RIGHT * 0.333333)              
-                # Create the product tex
+                
                 product_text = Text(str(product), font_size=24, color=ORANGE)
-                product_text.align_to(box[0], DR).shift(UP * 0.1 + LEFT * 0.1)
+                product_text.align_to(box[0], DR).shift(UP * 0.100000000001 + LEFT * 0.1)
                 
                 previousCalc_text = Text(str(previousCalc), font_size=24, color=BLACK)
                 previousCalc_text.align_to(box[0], DL).shift(UP * 0.1 + RIGHT * 0.1)
